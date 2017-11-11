@@ -32,7 +32,7 @@
 					pageList: [30, 50, 100],
 					pagination: true,
 					toolbar: toolbar,
-					url: "../../data/standard.json",
+					url: "/bos_management/standard_pageQuery",
 					idField: 'id',
 					columns: columns
 				});
@@ -59,7 +59,18 @@
 				text: '修改',
 				iconCls: 'icon-edit',
 				handler: function() {
-					alert('修改');
+					//获取当前选中行
+					var rows = $("#grid").datagrid("getSelections");
+					//判断是否只选择中了一行数据
+					if(rows.length != 1) {
+						$.messager.alert("提示信息", "只能选中一行！", "warning");
+					} else {
+						var row = rows[0];
+						//进行表单回显操作
+						$("#standardForm").form("load", row);
+						//显示窗口
+						$("#standardWindow").window("open");
+					}
 				}
 			}, {
 				id: 'button-delete',

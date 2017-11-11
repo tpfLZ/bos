@@ -2,12 +2,10 @@ package cn.itcast.bos.web.action.base;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -20,20 +18,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.PropertyFilter;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-import cn.itcast.bos.domain.base.Standard;
-import cn.itcast.bos.service.base.IStandardService;
+import cn.itcast.bos.domain.base.Courier;
+import cn.itcast.bos.service.base.ICourierService;
 
-@Controller("standardAction")
-@Scope("prototype")
-@ParentPackage("struts-default")
 @Namespace("/")
-@Actions
-public class StandardAction extends ActionSupport implements ModelDriven<Standard> {
+@ParentPackage("struts-default")
+@Controller("courierAction")
+@Scope("prototype")
+public class CourierAction extends ActionSupport implements ModelDriven<Courier> {
 
-    private Standard standard = new Standard();
+    private Courier courier = new Courier();
+    @Autowired
+    @Qualifier("courierService")
+    private ICourierService courierService;
     private int page;
     private int rows;
 
@@ -45,50 +47,46 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
         this.rows = rows;
     }
 
-    @Autowired
-    @Qualifier("standardService")
-    private IStandardService standardService;
-
     @Override
-    public Standard getModel() {
+    public Courier getModel() {
         // TODO Auto-generated method stub
-        return standard;
+        return courier;
     }
 
-    @Action(value = "standard_save", results = {
-            @Result(name = "success", location = "./pages/base/standard.html", type = "redirect") })
+    @Action(value = "courier_save", results = {
+            @Result(name = "success", location = "./pages/base/courier.html", type = "redirect") })
     public String save() {
-        standardService.save(standard);
+        courierService.save(courier);
         return SUCCESS;
     }
 
-    // 收派标准分页查询
-    @Action(value = "standard_pageQuery")
+    // 快递员信息进行分页查询
+    @Action(value = "courier_pageQuery")
     public void pageQuery() {
-        // 调用业务层，查询数据结果
+        // 查询所有的快递员信息
         Pageable pageable = new PageRequest(page - 1, rows);
-        Page<Standard> pageData = standardService.findPageData(pageable);
+        Page<Courier> pageData = courierService.findPageData(pageable);
 
-        // 将得到的结果封装到一个hashmap中
+        // 将得到的信息封装到一个map中
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("total", pageData.getTotalElements());
         result.put("rows", pageData.getContent());
 
-        // 使用fastjson将数据以json的格式返回给浏览器
-        String json = JSONObject.toJSONString(result);
-        try {
-            ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
-            ServletActionContext.getResponse().getWriter().write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+        // 过滤掉不必要的属性
+        PropertyFilter propertyFilter = new PropertyFilter() {
 
-    // 给快递员设置中返回取派标准设置
-    @Action(value = "standard_findAll")
-    public void findAll() {
-        List<Standard> allData = standardService.findAll();
-        String json = JSONObject.toJSONString(allData);
+            @Override
+            public boolean apply(Object object, String fieldName, Object value) {
+                // TODO Auto-generated method stub
+                if ("fixedAreas".equalsIgnoreCase(fieldName)) {
+                    return false;
+                }
+                return true;
+            }
+        };
+
+        // 将数据返回给浏览器
+        String json = JSONObject.toJSONString(result, propertyFilter, SerializerFeature.DisableCircularReferenceDetect);
         try {
             ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
             ServletActionContext.getResponse().getWriter().write(json);
