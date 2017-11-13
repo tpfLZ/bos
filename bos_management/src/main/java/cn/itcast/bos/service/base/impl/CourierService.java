@@ -3,6 +3,7 @@ package cn.itcast.bos.service.base.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,16 @@ public class CourierService implements ICourierService {
     }
 
     @Override
-    public Page<Courier> findPageData(Pageable pageable) {
-        return courierRepository.findAll(pageable);
+    public Page<Courier> findPageData(Pageable pageable, Specification<Courier> specification) {
+        return courierRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public void updateDelTag(String[] idArray) {
+        for (int i = 0; i < idArray.length; i++) {
+            Integer id = Integer.parseInt(idArray[i]);
+            courierRepository.updateDelTag(id);
+        }
     }
 
 }

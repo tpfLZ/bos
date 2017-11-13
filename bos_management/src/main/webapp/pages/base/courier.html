@@ -20,12 +20,24 @@
 				$('#addWindow').window("open");
 			}
 
-			function doEdit() {
-				alert("修改...");
+			function doSearch() {
+				$("#searchWindow").window("open");
 			}
 
 			function doDelete() {
-				alert("删除...");
+				var rows = $("#grid").datagrid("getSelections");
+				if(rows.length == 0) {
+					$.messager.alert("警告", "必须选中一条以上的数据", "warning");
+				} else {
+					var array = new Array();
+					for(var i = 0; i < rows.length; i++) {
+						array.push(rows[i].id);
+					}
+					//生成字符串
+					var ids = array.join(",");
+					//将字符串发送到服务器
+					window.location.href = "/bos_management/courier_updatDelTag?ids=" + ids;
+				}
 			}
 
 			function doRestore() {
@@ -38,10 +50,10 @@
 				iconCls: 'icon-add',
 				handler: doAdd
 			}, {
-				id: 'button-edit',
-				text: '修改',
-				iconCls: 'icon-edit',
-				handler: doEdit
+				id: 'button-search',
+				text: '查询',
+				iconCls: 'icon-search',
+				handler: doSearch
 			}, {
 				id: 'button-delete',
 				text: '作废',
@@ -110,9 +122,12 @@
 					width: 80,
 					align: 'center',
 					formatter: function(data, row, index) {
-						if(data == "0") {
+						//dtat当前属性对应json数据中的值
+						//rowdata当前行数据
+						//index第几行
+						if(data == null) {
 							return "正常使用"
-						} else {
+						} else if(data == "1") {
 							return "已作废";
 						}
 					}
@@ -171,11 +186,40 @@
 					}
 				});
 
+				//查询按钮事件
+				$("#searchBtn").click(function() {
+					//将表单的数据序列化进行获取
+					var params = $("#searchForm").serializeJson();
+					//将json对象绑定到daytagrid对象上，完成有条件的查询要求
+					$("#grid").datagrid("load", params);
+					//将查询窗口关掉
+					$("#searchWindow").window("close");
+				});
+
 			});
 
 			function doDblClickRow() {
 				alert("双击表格数据...");
 			}
+
+			//将表单序列化为json对象
+			$.fn.serializeJson = function() {
+				var serializeObj = {};
+				var array = this.serializeArray();
+				var str = this.serialize();
+				$(array).each(function() {
+					if(serializeObj[this.name]) {
+						if($.isArray(serializeObj[this.name])) {
+							serializeObj[this.name].push(this.value);
+						} else {
+							serializeObj[this.name] = [serializeObj[this.name], this.value];
+						}
+					} else {
+						serializeObj[this.name] = this.value;
+					}
+				});
+				return serializeObj;
+			};
 		</script>
 	</head>
 
@@ -252,7 +296,7 @@
 		</div>
 
 		<!-- 查询快递员-->
-		<div class="easyui-window" title="查询快递员窗口" closed="true" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="width: 400px; top:40px;left:200px">
+		<div class="easyui-window" title="查询快递员窗口" closed="true" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="width: 400px; top:40px;left:200px;">
 			<div style="overflow:auto;padding:5px;" border="false">
 				<form id="searchForm">
 					<table class="table-edit" width="80%" align="center">
