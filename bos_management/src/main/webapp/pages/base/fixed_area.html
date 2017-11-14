@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>管理定区/调度排班</title>
@@ -15,248 +16,280 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			function doAdd(){
+			function doAdd() {
 				$('#addWindow').window("open");
 			}
-			
-			function doEdit(){
+
+			function doEdit() {
 				alert("修改...");
 			}
-			
-			function doDelete(){
+
+			function doDelete() {
 				alert("删除...");
 			}
-			
-			function doSearch(){
+
+			function doSearch() {
 				$('#searchWindow').window("open");
 			}
-			
-			function doAssociations(){
+
+			function doAssociations() {
 				$('#customerWindow').window('open');
 			}
-			
+
 			//工具栏
-			var toolbar = [ {
-				id : 'button-search',	
-				text : '查询',
-				iconCls : 'icon-search',
-				handler : doSearch
+			var toolbar = [{
+				id: 'button-search',
+				text: '查询',
+				iconCls: 'icon-search',
+				handler: doSearch
 			}, {
-				id : 'button-add',
-				text : '增加',
-				iconCls : 'icon-add',
-				handler : doAdd
+				id: 'button-add',
+				text: '增加',
+				iconCls: 'icon-add',
+				handler: doAdd
 			}, {
-				id : 'button-edit',	
-				text : '修改',
-				iconCls : 'icon-edit',
-				handler : doEdit
-			},{
-				id : 'button-delete',
-				text : '删除',
-				iconCls : 'icon-cancel',
-				handler : doDelete
-			},{
-				id : 'button-association',
-				text : '关联客户',
-				iconCls : 'icon-sum',
-				handler : doAssociations
-			},{
-				id : 'button-association-courier',
-				text : '关联快递员',
-				iconCls : 'icon-sum',
-				handler : function(){
+				id: 'button-edit',
+				text: '修改',
+				iconCls: 'icon-edit',
+				handler: doEdit
+			}, {
+				id: 'button-delete',
+				text: '删除',
+				iconCls: 'icon-cancel',
+				handler: doDelete
+			}, {
+				id: 'button-association',
+				text: '关联客户',
+				iconCls: 'icon-sum',
+				handler: doAssociations
+			}, {
+				id: 'button-association-courier',
+				text: '关联快递员',
+				iconCls: 'icon-sum',
+				handler: function() {
 					// 判断是否已经选中了一个定区，弹出关联快递员窗口 
 					var rows = $("#grid").datagrid('getSelections');
-					if(rows.length==1){
+					if(rows.length == 1) {
 						// 只选择了一个定区
 						// 弹出定区关联快递员 窗口 
 						$("#courierWindow").window('open');
-					}else{
+					} else {
 						// 没有选中定区，或者选择 了多个定区
-						$.messager.alert("警告","关联快递员,只能（必须）选择一个定区","warning");
+						$.messager.alert("警告", "关联快递员,只能（必须）选择一个定区", "warning");
 					}
 				}
 			}];
 			// 定义列
-			var columns = [ [ {
-				field : 'id',
-				title : '编号',
-				width : 80,
-				align : 'center',
-				checkbox:true
-			},{
-				field : 'fixedAreaNum',
-				title : '定区编号',
-				width : 120,
-				align : 'center'
-			},{
-				field : 'fixedAreaName',
-				title : '定区名称',
-				width : 120,
-				align : 'center'
-			}, {
-				field : 'fixedAreaLeader',
-				title : '负责人',
-				width : 120,
-				align : 'center'
-			}, {
-				field : 'telephone',
-				title : '联系电话',
-				width : 120,
-				align : 'center'
-			}, {
-				field : 'company',
-				title : '所属公司',
-				width : 120,
-				align : 'center'
-			} ] ];
-			
-			$(function(){
+			var columns = [
+				[{
+					field: 'id',
+					title: '定区编号',
+					width: 120,
+					align: 'center',
+					checkbox: true
+				}, {
+					field: 'fixedAreaName',
+					title: '定区名称',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'fixedAreaLeader',
+					title: '负责人',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'telephone',
+					title: '联系电话',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'company',
+					title: '所属公司',
+					width: 120,
+					align: 'center'
+				}]
+			];
+
+			$(function() {
 				// 先将body隐藏，再显示，不会出现页面刷新效果
-				$("body").css({visibility:"visible"});
-				
-				// 定区数据表格
-				$('#grid').datagrid( {
-					iconCls : 'icon-forward',
-					fit : true,
-					border : true,
-					rownumbers : true,
-					striped : true,
-					pageList: [30,50,100],
-					pagination : true,
-					toolbar : toolbar,
-					url : "../../data/fixed_area.json",
-					idField : 'id',
-					columns : columns,
-					onDblClickRow : doDblClickRow
+				$("body").css({
+					visibility: "visible"
 				});
-				
+
+				// 定区数据表格
+				$('#grid').datagrid({
+					iconCls: 'icon-forward',
+					fit: true,
+					border: true,
+					rownumbers: true,
+					striped: true,
+					pageList: [30, 50, 100],
+					pagination: true,
+					toolbar: toolbar,
+					url: "/bos_management/fixedArea_pageQuery",
+					idField: 'id',
+					columns: columns,
+					onDblClickRow: doDblClickRow
+				});
+
 				// 添加、修改定区
 				$('#addWindow').window({
-			        title: '添加修改定区',
-			        width: 600,
-			        modal: true,
-			        shadow: true,
-			        closed: true,
-			        height: 400,
-			        resizable:false
-			    });
-				
+					title: '添加修改定区',
+					width: 600,
+					modal: true,
+					shadow: true,
+					closed: true,
+					height: 400,
+					resizable: false
+				});
+
 				// 查询定区
 				$('#searchWindow').window({
-			        title: '查询定区',
-			        width: 400,
-			        modal: true,
-			        shadow: true,
-			        closed: true,
-			        height: 400,
-			        resizable:false
-			    });
-				$("#btn").click(function(){
-					alert("执行查询...");
+					title: '查询定区',
+					width: 400,
+					modal: true,
+					shadow: true,
+					closed: true,
+					height: 400,
+					resizable: false
 				});
-				
+
+				//添加定区
+				$("#save").click(function() {
+					var params = $("#fixedAreaForm").serializeJson();
+					$("#fixedAreaForm").submit();
+					$("#addWindow").window("close");
+				});
+
+				//进行有条件的分页查询
+				$("#btn").click(function() {
+					var params = $("#searchForm").serializeJson();
+					$("#grid").datagrid("load", params);
+					$("#searchWindow").window("close");
+				});
 			});
-		
-			function doDblClickRow(){
+
+			function doDblClickRow() {
 				alert("双击表格数据...");
-				$('#association_subarea').datagrid( {
-					fit : true,
-					border : true,
-					rownumbers : true,
-					striped : true,
-					url : "../../data/association_subarea.json",
-					columns : [ [{
-						field : 'id',
-						title : '分拣编号',
-						width : 120,
-						align : 'center'
-					},{
-						field : 'province',
-						title : '省',
-						width : 120,
-						align : 'center',
-						formatter : function(data,row ,index){
-							if(row.area!=null){
-								return row.area.province;
+				$('#association_subarea').datagrid({
+					fit: true,
+					border: true,
+					rownumbers: true,
+					striped: true,
+					url: "../../data/association_subarea.json",
+					columns: [
+						[{
+							field: 'id',
+							title: '分拣编号',
+							width: 120,
+							align: 'center'
+						}, {
+							field: 'province',
+							title: '省',
+							width: 120,
+							align: 'center',
+							formatter: function(data, row, index) {
+								if(row.area != null) {
+									return row.area.province;
+								}
+								return "";
 							}
-							return "";
-						}
-					}, {
-						field : 'city',
-						title : '市',
-						width : 120,
-						align : 'center',
-						formatter : function(data,row ,index){
-							if(row.area!=null){
-								return row.area.city;
+						}, {
+							field: 'city',
+							title: '市',
+							width: 120,
+							align: 'center',
+							formatter: function(data, row, index) {
+								if(row.area != null) {
+									return row.area.city;
+								}
+								return "";
 							}
-							return "";
-						}
-					}, {
-						field : 'district',
-						title : '区',
-						width : 120,
-						align : 'center',
-						formatter : function(data,row ,index){
-							if(row.area!=null){
-								return row.area.district;
+						}, {
+							field: 'district',
+							title: '区',
+							width: 120,
+							align: 'center',
+							formatter: function(data, row, index) {
+								if(row.area != null) {
+									return row.area.district;
+								}
+								return "";
 							}
-							return "";
-						}
-					}, {
-						field : 'addresskey',
-						title : '关键字',
-						width : 120,
-						align : 'center'
-					}, {
-						field : 'startnum',
-						title : '起始号',
-						width : 100,
-						align : 'center'
-					}, {
-						field : 'endnum',
-						title : '终止号',
-						width : 100,
-						align : 'center'
-					} , {
-						field : 'single',
-						title : '单双号',
-						width : 100,
-						align : 'center'
-					} , {
-						field : 'position',
-						title : '位置',
-						width : 200,
-						align : 'center'
-					} ] ]
+						}, {
+							field: 'addresskey',
+							title: '关键字',
+							width: 120,
+							align: 'center'
+						}, {
+							field: 'startnum',
+							title: '起始号',
+							width: 100,
+							align: 'center'
+						}, {
+							field: 'endnum',
+							title: '终止号',
+							width: 100,
+							align: 'center'
+						}, {
+							field: 'single',
+							title: '单双号',
+							width: 100,
+							align: 'center'
+						}, {
+							field: 'position',
+							title: '位置',
+							width: 200,
+							align: 'center'
+						}]
+					]
 				});
-				$('#association_customer').datagrid( {
-					fit : true,
-					border : true,
-					rownumbers : true,
-					striped : true,
-					url : "../../data/association_customer.json",
-					columns : [[{
-						field : 'id',
-						title : '客户编号',
-						width : 120,
-						align : 'center'
-					},{
-						field : 'name',
-						title : '客户名称',
-						width : 120,
-						align : 'center'
-					}, {
-						field : 'company',
-						title : '所属单位',
-						width : 120,
-						align : 'center'
-					}]]
+				$('#association_customer').datagrid({
+					fit: true,
+					border: true,
+					rownumbers: true,
+					striped: true,
+					url: "/bos_management/fixedArea_pageQuery",
+					columns: [
+						[{
+							field: 'id',
+							title: '客户编号',
+							width: 120,
+							align: 'center'
+						}, {
+							field: 'name',
+							title: '客户名称',
+							width: 120,
+							align: 'center'
+						}, {
+							field: 'company',
+							title: '所属单位',
+							width: 120,
+							align: 'center'
+						}]
+					]
 				});
-				
+
 			}
+
+			//将表单序列化为json对象
+			$.fn.serializeJson = function() {
+				var serializeObj = {};
+				var array = this.serializeArray();
+				var str = this.serialize();
+				$(array).each(function() {
+					if(serializeObj[this.name]) {
+						if($.isArray(serializeObj[this.name])) {
+							serializeObj[this.name].push(this.value);
+						} else {
+							serializeObj[this.name] = [serializeObj[this.name], this.value];
+						}
+					} else {
+						serializeObj[this.name] = this.value;
+					}
+				});
+				return serializeObj;
+			};
 		</script>
 	</head>
 
@@ -284,7 +317,7 @@
 			</div>
 
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="fixedAreaForm" action="/bos_management/fixedArea_save" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">定区信息</td>
@@ -298,10 +331,29 @@
 						<tr>
 							<td>定区名称</td>
 							<td>
-								<input type="text" name="name" class="easyui-validatebox" required="true" />
+								<input type="text" name="fixedAreaName" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
+							<td>负责人</td>
+							<td>
+								<input type="text" name="fixedAreaLeader" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+						<tr>
+							<td>联系电话</td>
+							<td>
+								<input type="text" name="telephone" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+						<tr>
+							<td>所属公司</td>
+							<td>
+								<input type="text" name="company" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+
+						<!--<tr>
 							<td>选择负责人</td>
 							<td>
 								<input class="easyui-combobox" name="courier.id" data-options="valueField:'id',textField:'name',url:'../../data/courier.json'" />
@@ -320,7 +372,7 @@
 									</thead>
 								</table>
 							</td>
-						</tr>
+						</tr>-->
 					</table>
 				</form>
 			</div>
@@ -328,7 +380,7 @@
 		<!-- 查询定区 -->
 		<div class="easyui-window" title="查询定区窗口" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="searchForm">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">查询条件</td>
@@ -342,7 +394,7 @@
 						<tr>
 							<td>所属单位</td>
 							<td>
-								<input type="text" name="courier.company" class="easyui-validatebox" required="true" />
+								<input type="text" name="company" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
@@ -352,7 +404,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2"><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
+							<td colspan="2">
+								<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+							</td>
 						</tr>
 					</table>
 				</form>
@@ -382,23 +436,23 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3"><a id="associationBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a> </td>
+							<td colspan="3">
+								<a id="associationBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a>
+							</td>
 						</tr>
 					</table>
 				</form>
 			</div>
 		</div>
-		
+
 		<!-- 关联快递员窗口 -->
-		<div class="easyui-window" title="关联快递员窗口" id="courierWindow" modal="true"
-			collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 700px;height: 300px;">
+		<div class="easyui-window" title="关联快递员窗口" id="courierWindow" modal="true" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 700px;height: 300px;">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="courierForm" 
-					action="../../fixedArea_associationCourierToFixedArea.action" method="post">
+				<form id="courierForm" action="../../fixedArea_associationCourierToFixedArea.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">关联快递员</td>
-						</tr> 
+						</tr>
 						<tr>
 							<td>选择快递员</td>
 							<td>
@@ -414,7 +468,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3"><a id="associationCourierBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联快递员</a> </td>
+							<td colspan="3">
+								<a id="associationCourierBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联快递员</a>
+							</td>
 						</tr>
 					</table>
 				</form>
