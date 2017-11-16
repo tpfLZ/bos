@@ -2,6 +2,7 @@ package cn.itcast.bos.web.action.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -34,6 +37,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 import cn.itcast.bos.domain.base.FixedArea;
 import cn.itcast.bos.service.base.IFixedAreaService;
+import cn.itcast.crm.domain.Customer;
 
 @Namespace("/")
 @ParentPackage("struts-default")
@@ -120,5 +124,74 @@ public class FixedAreaAction extends ActionSupport implements ModelDriven<FixedA
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 未关联客户展示
+    @Action(value = "fixedArea_findNoAssociationCustomers")
+    public void findNoAssociationCustomers() {
+        // 使用webClient调用webService接口
+        Collection<? extends Customer> collection =
+                WebClient.create("http://localhost:9090/crm_management/services/customerService/noAssociationCustomers")
+                        .accept(MediaType.APPLICATION_JSON).getCollection(Customer.class);
+        String jsonString = JSONObject.toJSONString(collection);
+        ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
+        try {
+            ServletActionContext.getResponse().getWriter().write(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 已关联客户展示
+    @Action(value = "fixedArea_findHasAssociationFixedAreaCustomers")
+    public void findHasAssociationFixedAreaCustomers() {
+        Collection<? extends Customer> collection = WebClient.create(
+                "http://localhost:9090/crm_management/services/customerService/hasAssociationFixedAreaCustomers/"
+                        + fixedArea.getId())
+                .accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).getCollection(Customer.class);
+        String json = JSONObject.toJSONString(collection);
+        ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
+        try {
+            ServletActionContext.getResponse().getWriter().write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 将以关联客户的id和当前选中的定区的id发到服务器
+    private String[] customerIds;
+
+    public void setCustomerIds(String[] customerIds) {
+        this.customerIds = customerIds;
+    }
+
+    @Action(value = "fixedArea_associationCustomersToFixedArea", results = {
+            @Result(name = "success", location = "./pages/base/fixed_area.html", type = "redirect") })
+    public String associationCustomersToFixedArea() {
+        String customerIdStr = StringUtils.join(customerIds, ",");
+        WebClient.create(
+                "http://localhost:9090/crm_management/services/customerService/associationCustomersToFixedArea?customerIdStr="
+                        + customerIdStr + "&fixedAreaId=" + fixedArea.getId())
+                .put(null);
+        return SUCCESS;
+    }
+
+    // 将快递员与时间和定区进行关联
+    private Integer courierId;
+    private Integer takeTimeId;
+
+    public void setCourierId(Integer courierId) {
+        this.courierId = courierId;
+    }
+
+    public void setTakeTimeId(Integer takeTimeId) {
+        this.takeTimeId = takeTimeId;
+    }
+
+    @Action(value = "fixedArea_associationCourierToFixedArea", results = {
+            @Result(name = "success", location = "./pages/base/fixed_area.html", type = "redirect") })
+    public String associationCourierToFixedArea() {
+        fixedAreaService.associationCourierToFixedArea(fixedArea.getId(), courierId, takeTimeId);
+        return SUCCESS;
     }
 }

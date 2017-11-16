@@ -1,5 +1,13 @@
 package cn.itcast.bos.service.base.impl;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +42,21 @@ public class CourierService implements ICourierService {
             Integer id = Integer.parseInt(idArray[i]);
             courierRepository.updateDelTag(id);
         }
+    }
+
+    @Override
+    public List<Courier> findNoAssociation() {
+        // 封装查询条件
+        Specification<Courier> specification = new Specification<Courier>() {
+
+            @Override
+            public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                // 查询条件，判断列表size为空
+                Predicate predicate = cb.isEmpty(root.get("fixedAreas").as(Set.class));
+                return predicate;
+            }
+        };
+        return courierRepository.findAll(specification);
     }
 
 }

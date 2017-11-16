@@ -13,4 +13,7 @@ public interface IFixedAreaService {
 
     // 有条件的分页查询
     public abstract Page<FixedArea> pageQuery(Specification<FixedArea> specification, Pageable pageable);
+
+    // 将快递员与收派时间和定区关联
+    public abstract void associationCourierToFixedArea(String fixedAreaId, Integer courierId, Integer takeTimeId);
 }

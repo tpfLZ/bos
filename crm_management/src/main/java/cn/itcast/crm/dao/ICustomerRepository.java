@@ -20,4 +20,9 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("update Customer set fixedAreaId = ? where id = ?")
     @Modifying
     public void updateFixedAreaId(String fixedAreaId, Integer id);
+
+    // 将表中的所有定区id都置空
+    @Query("update Customer set fixedAreaId = null where fixedAreaId = ?")
+    @Modifying
+    public void clearFixedAreaId(String fixedAreaId);
 }

@@ -32,8 +32,42 @@
 				$('#searchWindow').window("open");
 			}
 
+			//关联客户窗口
 			function doAssociations() {
-				$('#customerWindow').window('open');
+				$("#noassociationSelect").empty();
+				$("#associationSelect").empty();
+				var rows = $("#grid").datagrid("getSelections");
+				if(rows.length == 1) {
+					//将选中的定区id赋值给隐藏的表单
+					$("#customerFixedAreaId").val(rows[0].id);
+					//展示进度条
+					$.messager.progress({
+						interval: 500
+					});
+					//发送Ajax请求，从服务器查询数据在页面上展示
+					$.post("/bos_management/fixedArea_findNoAssociationCustomers", function(data) {
+						//未选择定区客户展示
+						$(data).each(function() {
+							var option = $("<option value='" + this.id + "'>" + this.username + "(" + this.address + ")</option>");
+							$("#noassociationSelect").append(option);
+						});
+					}, "json");
+					$.post("/bos_management/fixedArea_findHasAssociationFixedAreaCustomers", {
+						"id": rows[0].id
+					}, function(data) {
+						//已选中定区客户展示
+						$(data).each(function() {
+							var option = $("<option value='" + this.id + "'>" + this.username + "(" + this.address + ")</option>");
+							$("#associationSelect").append(option);
+						});
+						//请求结束后关闭进度条
+						$.messager.progress("close");
+						//如果只选择了一条数据，打开窗口
+						$("#customerWindow").window("open");
+					}, "json");
+				} else {
+					$.messager.alert("警告", "只能选择一条数据！", "warning");
+				}
 			}
 
 			//工具栏
@@ -73,6 +107,8 @@
 						// 只选择了一个定区
 						// 弹出定区关联快递员 窗口 
 						$("#courierWindow").window('open');
+						//保存选中定区id到表单隐藏域
+						$("#courierFixedAreaId").val(rows[0].id);
 					} else {
 						// 没有选中定区，或者选择 了多个定区
 						$.messager.alert("警告", "关联快递员,只能（必须）选择一个定区", "warning");
@@ -82,11 +118,13 @@
 			// 定义列
 			var columns = [
 				[{
+					checkbox: true
+				}, {
 					field: 'id',
 					title: '定区编号',
 					width: 120,
-					align: 'center',
-					checkbox: true
+					align: 'center'
+
 				}, {
 					field: 'fixedAreaName',
 					title: '定区名称',
@@ -166,6 +204,33 @@
 					var params = $("#searchForm").serializeJson();
 					$("#grid").datagrid("load", params);
 					$("#searchWindow").window("close");
+				});
+
+				//向右移动按钮
+				$("#toRight").click(function() {
+					$("#associationSelect").append($("#noassociationSelect option:selected"));
+				});
+
+				//向左移动按钮
+				$("#toLeft").click(function() {
+					$("#noassociationSelect").append($("#associationSelect option:selected"));
+				});
+
+				//为关联客户添加click事件
+				$("#associationBtn").click(function() {
+					//选中所有已关联客户select中的选项
+					$("#associationSelect option").attr("selected", "selected");
+					//提交表单
+					$("#customerForm").submit();
+				});
+
+				//为关联快递员添加click事件
+				$("#associationCourierBtn").click(function() {
+					if($("#courierForm").form("validate")) {
+						$("#courierForm").submit();
+					} else {
+						$.messager.alert("警告", "表单中存在非法数据！", "warning");
+					}
 				});
 			});
 
@@ -414,17 +479,18 @@
 		</div>
 
 		<!-- 关联客户窗口 -->
-		<div class="easyui-window" title="关联客户窗口" id="customerWindow" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 400px;height: 300px;">
+		<div class="easyui-window" title="关联客户窗口" id="customerWindow" modal="true" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 700px;height: 300px;">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="customerForm" action="../../decidedzone_assigncustomerstodecidedzone.action" method="post">
+				<form id="customerForm" action="/bos_management/fixedArea_associationCustomersToFixedArea" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="3">关联客户</td>
 						</tr>
 						<tr>
 							<td>
+								<!-- 存放定区编号 -->
 								<input type="hidden" name="id" id="customerFixedAreaId" />
-								<select id="noassociationSelect" multiple="multiple" size="10"></select>
+								<select id="noassociationSelect" multiple="multiple" size="10" style="width: 300px;"></select>
 							</td>
 							<td>
 								<input type="button" value="》》" id="toRight">
@@ -432,7 +498,7 @@
 								<input type="button" value="《《" id="toLeft">
 							</td>
 							<td>
-								<select id="associationSelect" name="customerIds" multiple="multiple" size="10"></select>
+								<select id="associationSelect" name="customerIds" multiple="multiple" size="10" style="width: 300px;"></select>
 							</td>
 						</tr>
 						<tr>
@@ -448,7 +514,7 @@
 		<!-- 关联快递员窗口 -->
 		<div class="easyui-window" title="关联快递员窗口" id="courierWindow" modal="true" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 700px;height: 300px;">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="courierForm" action="../../fixedArea_associationCourierToFixedArea.action" method="post">
+				<form id="courierForm" action="/bos_management/fixedArea_associationCourierToFixedArea" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">关联快递员</td>
@@ -458,13 +524,13 @@
 							<td>
 								<!-- 存放定区编号 -->
 								<input type="hidden" name="id" id="courierFixedAreaId" />
-								<input type="text" name="courierId" class="easyui-combobox" required="true" />
+								<input type="text" name="courierId" class="easyui-combobox" required="true" data-options="url:'/bos_management/courier_findNoAssociation',valueField:'id',textField:'info'" />
 							</td>
 						</tr>
 						<tr>
 							<td>选择收派时间</td>
 							<td>
-								<input type="text" name="takeTimeId" class="easyui-combobox" required="true" />
+								<input type="text" name="takeTimeId" class="easyui-combobox" required="true" data-options="url:'/bos_management/takeTime_findAll',valueField:'id',textField:'name'" />
 							</td>
 						</tr>
 						<tr>

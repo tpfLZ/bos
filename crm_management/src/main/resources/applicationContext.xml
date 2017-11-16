@@ -25,7 +25,7 @@
 	<import resource="applicationContext-dataSource.xml" />
 
 	<!-- 配置服务端cxf-rs-webService提供服务 -->
-	<jaxrs:server id="customerService" address="customerService">
+	<jaxrs:server id="customerService" address="/customerService">
 		<jaxrs:serviceBeans>
 			<bean class="cn.itcast.crm.service.impl.CustomerService"></bean>
 		</jaxrs:serviceBeans>

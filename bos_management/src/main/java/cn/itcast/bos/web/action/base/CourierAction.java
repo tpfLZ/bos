@@ -159,4 +159,30 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
         courierService.updateDelTag(idArray);
         return SUCCESS;
     }
+
+    // 查询未关联定区的快递员
+    @Action(value = "courier_findNoAssociation")
+    public void findNoAssociation() {
+        List<Courier> list = courierService.findNoAssociation();
+        // 过滤掉不必要的属性
+        PropertyFilter propertyFilter = new PropertyFilter() {
+
+            @Override
+            public boolean apply(Object object, String fieldName, Object value) {
+                if ("fixedAreas".equalsIgnoreCase(fieldName)) {
+                    return false;
+                }
+                return true;
+            }
+        };
+
+        // 将数据返回给浏览器
+        String json = JSONObject.toJSONString(list, propertyFilter, SerializerFeature.DisableCircularReferenceDetect);
+        try {
+            ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
+            ServletActionContext.getResponse().getWriter().write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
