@@ -2,7 +2,9 @@ package cn.itcast.crm.service;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,4 +32,10 @@ public interface ICustomerService {
     @PUT
     public void associationCustomersToFixedArea(@QueryParam("customerIdStr") String customerIdStr,
             @QueryParam("fixedAreaId") String fixedAreaId);
+
+    // 插入一条新的客户数据(跨系统传递一个对象时使用consumes注解)
+    @Path("/insertNewCustomer")
+    @POST
+    @Consumes({ "application/xml", "application/json" })
+    public void regist(Customer customer);
 }

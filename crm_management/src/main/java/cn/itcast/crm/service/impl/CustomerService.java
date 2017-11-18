@@ -45,4 +45,9 @@ public class CustomerService implements ICustomerService {
         }
     }
 
+    @Override
+    public void regist(Customer customer) {
+        customerRepository.save(customer);
+    }
+
 }
