@@ -25,4 +25,12 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("update Customer set fixedAreaId = null where fixedAreaId = ?")
     @Modifying
     public void clearFixedAreaId(String fixedAreaId);
+
+    // 根据用户手机号查询用户是否已经绑定邮箱
+    public Customer findByTelephone(String telephone);
+
+    // 根据用户手机号来绑定当前邮箱
+    @Query("update Customer set type = 1 where telephone = ?")
+    @Modifying
+    public void bindEmail(String telephone);
 }

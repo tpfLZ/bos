@@ -50,4 +50,14 @@ public class CustomerService implements ICustomerService {
         customerRepository.save(customer);
     }
 
+    @Override
+    public Customer findByTelephone(String telephone) {
+        return customerRepository.findByTelephone(telephone);
+    }
+
+    @Override
+    public void updateTypeByTelephone(String telephone) {
+        customerRepository.bindEmail(telephone);
+    }
+
 }

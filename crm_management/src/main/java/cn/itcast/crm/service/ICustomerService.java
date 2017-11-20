@@ -38,4 +38,16 @@ public interface ICustomerService {
     @POST
     @Consumes({ "application/xml", "application/json" })
     public void regist(Customer customer);
+
+    // 根据手机号查询某个用户是否已经绑定邮箱
+    @Path("/isBindEmail/{telephone}")
+    @GET
+    @Produces({ "application/xml", "application/json" })
+    public Customer findByTelephone(@PathParam("telephone") String telephone);
+
+    // 根据用户的手机号来绑定邮箱
+    @Path("/bindEmail")
+    @PUT
+    public void updateTypeByTelephone(@QueryParam("telephone") String telephone);
+
 }

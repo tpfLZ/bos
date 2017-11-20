@@ -1,5 +1,7 @@
 package cn.itcast.bos.web.action;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -9,13 +11,16 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-import cn.itcast.bos.utils.AlibabaSmsUtils;
+import cn.itcast.bos.utils.MailUtils;
 import cn.itcast.crm.domain.Customer;
 
 @Namespace("/")
@@ -29,6 +34,10 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     }
 
     private Customer customer = new Customer();
+    // 注入redis对象
+    @Autowired
+    @Qualifier("redisTemplate")
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Customer getModel() {
@@ -45,7 +54,8 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
         ServletActionContext.getRequest().getSession().setAttribute(customer.getTelephone(), randomCode);
         System.out.println("生成的短信验证码为:" + randomCode);
         // 发送短信
-        boolean flage = AlibabaSmsUtils.sendSms(customer.getTelephone(), "小米", randomCode);
+        // boolean flage = AlibabaSmsUtils.sendSms(customer.getTelephone(), "小米", randomCode);
+        boolean flage = true;
         // 判断短信是否成功发送
         if (flage) {
             // 发送成功
@@ -78,6 +88,50 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
         // 如果验证一致，调crm系统插入一条用户数据
         WebClient.create("http://localhost:9090/crm_management/services/customerService/insertNewCustomer")
                 .type(MediaType.APPLICATION_JSON).post(customer);
+
+        // 发送一封激活邮件
+        // 生成激活码
+        String activeCode = RandomStringUtils.randomNumeric(32);
+        // 将生成的激活码保存到redis数据库中，设置24小时有效
+        redisTemplate.opsForValue().set(customer.getTelephone(), activeCode, 24, TimeUnit.HOURS);
+        // 调用MailUtils发送一封激活邮件
+        String content = "尊敬的客户您好，请于24小时内绑定邮箱，请点击下面邮箱的地址进行绑定：<br/><a href='" + MailUtils.activeUrl + "?telephone="
+                + customer.getTelephone() + "&activeCode=" + activeCode + "'>速运邮箱绑定地址</a>";
+        MailUtils.sendMail("速运快递激活邮件", content, customer.getTelephone());
         return SUCCESS;
+    }
+
+    // 用户绑定邮箱验证
+    private String activeCode;
+
+    public void setActiveCode(String activeCode) {
+        this.activeCode = activeCode;
+    }
+
+    @Action(value = "customer_activeMail")
+    public void activeMail() throws Exception {
+        // 让页面能够解析中文
+        ServletActionContext.getResponse().setContentType("text/html;charset=utf-8");
+        // 判断激活码是否有效，如果激活码无效，提示用户
+        String redisActiveCode = redisTemplate.opsForValue().get(customer.getTelephone());
+        if (redisActiveCode == null || !activeCode.equals(redisActiveCode)) {
+            ServletActionContext.getResponse().getWriter().println("您的激活码已经失效，请重新注册激活！");
+        } else {
+            // 如果激活码有效 ，判断是否在重复绑定，T_CUSTOMER 表 type 字段 为 1，绑定
+            Customer c = WebClient
+                    .create("http://localhost:9090/crm_management/services/customerService/isBindEmail/"
+                            + customer.getTelephone())
+                    .accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).get(Customer.class);
+            if (c.getType() == null || c.getType() != 1) {
+                // 如果未绑定
+                WebClient.create("http://localhost:9090/crm_management/services/customerService/bindEmail?telephone="
+                        + customer.getTelephone()).type(MediaType.APPLICATION_JSON).put(null);
+                ServletActionContext.getResponse().getWriter().println("邮箱绑定成功！");
+            } else {
+                ServletActionContext.getResponse().getWriter().println("邮箱已经绑定！");
+            }
+        }
+        // 删除激活码
+        redisTemplate.delete(customer.getTelephone());
     }
 }
