@@ -22,4 +22,6 @@
 	<!-- 引入redis配置文件 -->
 	<import resource="applicationContext-cache.xml" />
 
+	<!-- 引入mq消息队列配置文件 -->
+	<import resource="applicationContext-mq.xml" />
 </beans>

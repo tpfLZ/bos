@@ -2,6 +2,10 @@ package cn.itcast.bos.web.action;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Session;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -15,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -38,6 +44,10 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     @Autowired
     @Qualifier("redisTemplate")
     private RedisTemplate<String, String> redisTemplate;
+    // 注入jms对象
+    @Autowired
+    @Qualifier("jmsQueueTemplate")
+    private JmsTemplate jmsTemplate;
 
     @Override
     public Customer getModel() {
@@ -49,21 +59,22 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     @Action(value = "customer_sendSms")
     public String sendSms() throws Exception {
         // 调用字符串工具生成短信验证码
-        String randomCode = RandomStringUtils.randomNumeric(4);
+        final String randomCode = RandomStringUtils.randomNumeric(4);
         // 将短信验证码保存到session中
         ServletActionContext.getRequest().getSession().setAttribute(customer.getTelephone(), randomCode);
         System.out.println("生成的短信验证码为:" + randomCode);
-        // 发送短信
-        // boolean flage = AlibabaSmsUtils.sendSms(customer.getTelephone(), "小米", randomCode);
-        boolean flage = true;
-        // 判断短信是否成功发送
-        if (flage) {
-            // 发送成功
-            return NONE;
-        } else {
-            // 发送失败
-            throw new RuntimeException("发送短信出错！");
-        }
+        // 调用MQ服务，发送一条消息到中间件
+        jmsTemplate.send("bos_sms", new MessageCreator() {
+
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                MapMessage mapMessage = session.createMapMessage();
+                mapMessage.setString("telephone", customer.getTelephone());
+                mapMessage.setString("randomCode", randomCode);
+                return mapMessage;
+            }
+        });
+        return NONE;
     }
 
     // 用户注册

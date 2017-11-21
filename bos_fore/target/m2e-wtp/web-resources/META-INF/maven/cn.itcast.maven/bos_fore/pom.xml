@@ -25,22 +25,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>3.2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>cn.itcast.maven</groupId>
-			<artifactId>crm_domain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 </project>
