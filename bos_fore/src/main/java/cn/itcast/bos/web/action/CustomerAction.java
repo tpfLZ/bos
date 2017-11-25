@@ -145,4 +145,23 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
         // 删除激活码
         redisTemplate.delete(customer.getTelephone());
     }
+
+    // 用户登录
+    @Action(value = "customer_login", results = {
+            @Result(name = "success", type = "redirect", location = "index.html#/myhome"),
+            @Result(name = "login", type = "redirect", location = "login.html") })
+    public String login() {
+        Customer loginCustomer = WebClient
+                .create("http://localhost:9090/crm_management/services/customerService/customer/login?telephone="
+                        + customer.getTelephone() + "&password=" + customer.getPassword())
+                .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(Customer.class);
+        if (loginCustomer == null) {
+            return LOGIN;
+        } else {
+            // 登录成功
+            ServletActionContext.getRequest().getSession().setAttribute("loginCustomer", loginCustomer);
+            return SUCCESS;
+        }
+
+    }
 }

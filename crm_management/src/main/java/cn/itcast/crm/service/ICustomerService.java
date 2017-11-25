@@ -50,4 +50,10 @@ public interface ICustomerService {
     @PUT
     public void updateTypeByTelephone(@QueryParam("telephone") String telephone);
 
+    // 根据手机号和密码判断是否有该用户
+    @Path("/customer/login")
+    @GET
+    @Produces({ "application/xml", "application/json" })
+    public Customer findByTelephoneAndPassword(@QueryParam("telephone") String telephone,
+            @QueryParam("password") String password);
 }

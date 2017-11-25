@@ -60,4 +60,9 @@ public class CustomerService implements ICustomerService {
         customerRepository.bindEmail(telephone);
     }
 
+    @Override
+    public Customer findByTelephoneAndPassword(String telephone, String password) {
+        return customerRepository.findByTelephoneAndPassword(telephone, password);
+    }
+
 }

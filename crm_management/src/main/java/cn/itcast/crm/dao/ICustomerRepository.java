@@ -33,4 +33,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("update Customer set type = 1 where telephone = ?")
     @Modifying
     public void bindEmail(String telephone);
+
+    // 根据手机号和密码判断是否有该用户
+    public Customer findByTelephoneAndPassword(String telephone, String password);
 }
