@@ -4,6 +4,7 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IPromotionRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/quartz/JobFactory.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/StandardService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IWorkBillRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/StrutsPrepareAndExecuteFilterExcludingWebService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/PinYin4jUtils.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IStandardRepository.java
@@ -16,6 +17,7 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IAreaRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/ImageAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/ITakeTimeRepository.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/OrderService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IFixedAreaRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/ICourierService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/AreaService.java
@@ -24,6 +26,8 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/TakeTimeService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/CourierService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/ITakeTimeService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/IOrderService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/FixedAreaAction.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IOrderRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/StandardAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/quartz/PromotionJob.java

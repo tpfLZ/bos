@@ -36,4 +36,8 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
 
     // 根据手机号和密码判断是否有该用户
     public Customer findByTelephoneAndPassword(String telephone, String password);
+
+    // 根据地址获取定区编码
+    @Query("select fixedAreaId from Customer where address = ?")
+    public String findFixedAreaIdByAddress(String address);
 }

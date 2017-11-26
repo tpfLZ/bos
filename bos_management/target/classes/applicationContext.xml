@@ -21,6 +21,9 @@
 	<!-- 加载properties文件 -->
 	<context:property-placeholder location="classpath:config.properties" />
 
+	<!-- 引入消息队列配置 -->
+	<import resource="applicationContext-mq.xml" />
+
 	<!-- 连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driver}" />
@@ -79,6 +82,11 @@
 	<jaxrs:server id="proService" address="/promotionService">
 		<jaxrs:serviceBeans>
 			<bean class="cn.itcast.bos.service.take_delivery.impl.PromotionService"></bean>
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+	<jaxrs:server id="ordService" address="/orderService">
+		<jaxrs:serviceBeans>
+			<bean class="cn.itcast.bos.service.take_delivery.impl.OrderService"></bean>
 		</jaxrs:serviceBeans>
 	</jaxrs:server>
 

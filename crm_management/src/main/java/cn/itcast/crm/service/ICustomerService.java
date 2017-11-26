@@ -56,4 +56,10 @@ public interface ICustomerService {
     @Produces({ "application/xml", "application/json" })
     public Customer findByTelephoneAndPassword(@QueryParam("telephone") String telephone,
             @QueryParam("password") String password);
+
+    // 根据地址获取定区编码
+    @Path("/customer/findFixedAreaIdByAddress")
+    @GET
+    @Produces({ "application/xml", "application/json" })
+    public String findFixedAreaIdByAddress(@QueryParam("address") String address);
 }
