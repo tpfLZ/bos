@@ -156,4 +156,9 @@ public class OrderService implements IOrderService {
         // 生成工单，发短信
         generateWorkBill(order);
     }
+
+    @Override
+    public Order findByOrderNum(String orderNum) {
+        return orderRepository.findByOrderNum(orderNum);
+    }
 }

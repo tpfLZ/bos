@@ -12,4 +12,6 @@ public interface IOrderService {
     @POST
     @Consumes({ "application/xml", "application/json" })
     public abstract void saveOrder(Order order);
+
+    public abstract Order findByOrderNum(String orderNum);
 }

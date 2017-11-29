@@ -6,14 +6,17 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/StandardService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IWorkBillRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/StrutsPrepareAndExecuteFilterExcludingWebService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/WayBillService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/PinYin4jUtils.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IStandardRepository.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/OrderAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/CourierAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/IAreaService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/PromotionService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/PromotionAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/ICourierRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/TakeTimeAction.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/IWayBillService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IAreaRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/ImageAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/ITakeTimeRepository.java
@@ -21,6 +24,7 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IFixedAreaRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/ICourierService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/AreaService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/WayBillAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/FixedAreaService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/IPromotionService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/TakeTimeService.java
@@ -31,3 +35,4 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IOrderRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/StandardAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/quartz/PromotionJob.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IWayBillRepository.java

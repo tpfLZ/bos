@@ -6,4 +6,5 @@ import cn.itcast.bos.domain.take_delivery.Order;
 
 public interface IOrderRepository extends JpaRepository<Order, Integer> {
 
+    public abstract Order findByOrderNum(String orderNum);
 }
