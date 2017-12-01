@@ -84,7 +84,7 @@ public class WayBillAction extends ActionSupport implements ModelDriven<WayBill>
     @Action(value = "waybill_pageQuery")
     public void pageQuery() {
         Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Sort.Order(Sort.Direction.DESC, "id")));
-        Page<WayBill> pageData = wayBillService.findPageData(pageable);
+        Page<WayBill> pageData = wayBillService.findPageData(wayBill, pageable);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("total", pageData.getTotalElements());
         result.put("rows", pageData.getContent());

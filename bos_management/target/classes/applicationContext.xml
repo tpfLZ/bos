@@ -24,6 +24,12 @@
 	<!-- 引入消息队列配置 -->
 	<import resource="applicationContext-mq.xml" />
 
+	<!-- 引入elasticsearch配置 -->
+	<import resource="applicationContext-elasticsearch.xml" />
+
+	<!-- 引入shiro权限配置 -->
+	<import resource="applicationContext-shiro.xml" />
+
 	<!-- 连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driver}" />

@@ -11,7 +11,7 @@ public interface IWayBillService {
     public abstract void save(WayBill wayBill);
 
     // 快速运单分页查询
-    public abstract Page<WayBill> findPageData(Pageable pageable);
+    public abstract Page<WayBill> findPageData(WayBill wayBill, Pageable pageable);
 
     public abstract WayBill findWayBill(String wayBillNum);
 }
