@@ -49,4 +49,13 @@ public class UserAction extends ActionSupport implements ModelDriven<User> {
             return LOGIN;
         }
     }
+
+    // 退出登录
+    @Action(value = "user_logout", results = { @Result(name = "success", type = "redirect", location = "login.html") })
+    public String logout() {
+        // 基于shiro完成退出
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return SUCCESS;
+    }
 }

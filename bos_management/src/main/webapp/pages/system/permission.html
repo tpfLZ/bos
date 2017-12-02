@@ -16,41 +16,40 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			$(function(){
+			$(function() {
 				$("#grid").datagrid({
-					toolbar : [
-						{
-							id : 'add',
-							text : '添加权限',
-							iconCls : 'icon-add',
-							handler : function(){
-								location.href='permission_add.html';
+					toolbar: [{
+						id: 'add',
+						text: '添加权限',
+						iconCls: 'icon-add',
+						handler: function() {
+							location.href = 'permission_add.html';
+						}
+					}],
+					url: '../../permission_list',
+					columns: [
+						[{
+								field: 'id',
+								title: '编号',
+								width: 200
+							},
+							{
+								field: 'name',
+								title: '名称',
+								width: 200
+							},
+							{
+								field: 'keyword',
+								title: '关键字',
+								width: 200
+							},
+							{
+								field: 'description',
+								title: '描述',
+								width: 200
 							}
-						}           
-					],
-					url : '',
-					columns : [[
-					  {
-						  field : 'id',
-						  title : '编号',
-						  width : 200
-					  },
-					  {
-						  field : 'name',
-						  title : '名称',
-						  width : 200
-					  }, 
-					  {
-						  field : 'keyword',
-						  title : '关键字',
-						  width : 200
-					  },
-					  {
-						  field : 'description',
-						  title : '描述',
-						  width : 200
-					  }
-					]]
+						]
+					]
 				});
 			});
 		</script>

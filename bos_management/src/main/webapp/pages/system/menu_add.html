@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>菜单添加</title>
@@ -15,10 +16,12 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			$(function(){
+			$(function() {
 				// 点击保存
-				$('#save').click(function(){
-					location.href='menu.html';
+				$('#save').click(function() {
+					if($("#menuForm").form("validate")) {
+						$("#menuForm").submit();
+					}
 				});
 			});
 		</script>
@@ -31,7 +34,7 @@
 			</div>
 		</div>
 		<div data-options="region:'center'">
-			<form id="functionForm" method="post">
+			<form id="menuForm" method="post" action="../../menu_save">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">菜单项信息</td>
@@ -57,7 +60,7 @@
 					<tr>
 						<td>父菜单项</td>
 						<td>
-							<input name="parentMenu.id" class="easyui-combobox" data-options="valueField:'id',textField:'info',url:''" />
+							<input name="parentMenu.id" class="easyui-combobox" data-options="valueField:'id',textField:'info',url:'../../menu_list'" />
 						</td>
 					</tr>
 					<tr>
