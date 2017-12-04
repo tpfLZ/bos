@@ -33,7 +33,7 @@
 				};
 
 				// 基本功能菜单加载
-				$.post("./data/menu.json", function(data) {
+				$.post("menu_showMenu", function(data) {
 					$.fn.zTree.init($("#treeMenu"), setting, data);
 				}, "json");
 

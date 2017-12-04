@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * @description:后台用户
  */
@@ -42,6 +44,7 @@ public class User implements Serializable {
     @Column(name = "C_NICKNAME")
     private String nickname; // 真实姓名
 
+    @JSONField(serialize = false)
     @ManyToMany
     @JoinTable(name = "T_USER_ROLE", joinColumns = {
             @JoinColumn(name = "C_USER_ID", referencedColumnName = "C_ID") }, inverseJoinColumns = {

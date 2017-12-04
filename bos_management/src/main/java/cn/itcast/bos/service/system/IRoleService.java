@@ -9,4 +9,6 @@ public interface IRoleService {
     public abstract List<Role> findByUser(Integer id);
 
     public abstract List<Role> findAll();
+
+    public abstract void save(Role role, String[] permissionIds, String menuIds);
 }

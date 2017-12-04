@@ -14,4 +14,7 @@ public interface IWayBillService {
     public abstract Page<WayBill> findPageData(WayBill wayBill, Pageable pageable);
 
     public abstract WayBill findWayBill(String wayBillNum);
+
+    // 同步更新elasticsearch数据库索引
+    public abstract void syncIndex();
 }

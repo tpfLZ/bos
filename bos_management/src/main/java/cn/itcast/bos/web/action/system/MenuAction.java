@@ -3,6 +3,8 @@ package cn.itcast.bos.web.action.system;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -18,6 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 import cn.itcast.bos.domain.system.Menu;
+import cn.itcast.bos.domain.system.User;
 import cn.itcast.bos.service.system.IMenuService;
 
 @Namespace("/")
@@ -54,6 +57,22 @@ public class MenuAction extends ActionSupport implements ModelDriven<Menu> {
     public String save() {
         menuService.save(menu);
         return SUCCESS;
+    }
+
+    @Action(value = "menu_showMenu")
+    public void showMenu() {
+        // 调用业务层，查询具体的菜单列表
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+
+        List<Menu> menus = menuService.findByUser(user);
+        String json = JSONObject.toJSONString(menus);
+        ServletActionContext.getResponse().setCharacterEncoding("utf-8");
+        try {
+            ServletActionContext.getResponse().getWriter().write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

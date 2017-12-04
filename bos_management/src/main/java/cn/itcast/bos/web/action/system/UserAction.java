@@ -1,21 +1,28 @@
 package cn.itcast.bos.web.action.system;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 import cn.itcast.bos.domain.system.User;
+import cn.itcast.bos.service.system.IUserService;
 
 @Namespace("/")
 @ParentPackage("struts-default")
@@ -24,6 +31,8 @@ import cn.itcast.bos.domain.system.User;
 public class UserAction extends ActionSupport implements ModelDriven<User> {
 
     private User user = new User();
+    @Autowired
+    private IUserService userService;
 
     @Override
     public User getModel() {
@@ -57,5 +66,18 @@ public class UserAction extends ActionSupport implements ModelDriven<User> {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return SUCCESS;
+    }
+
+    // 查询所有的用户
+    @Action(value = "user_list")
+    public void findAll() {
+        List<User> users = userService.findAll();
+        String json = JSONObject.toJSONString(users);
+        ServletActionContext.getResponse().setCharacterEncoding("utf-8");
+        try {
+            ServletActionContext.getResponse().getWriter().write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

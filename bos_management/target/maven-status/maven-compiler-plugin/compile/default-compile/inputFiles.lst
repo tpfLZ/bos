@@ -8,6 +8,7 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/system/impl/MenuService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/index/IWayBillIndexRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/StrutsPrepareAndExecuteFilterExcludingWebService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/transit/ITransitInfoRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/utils/PinYin4jUtils.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IStandardRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/OrderAction.java
@@ -23,6 +24,7 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/IPromotionService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/TakeTimeService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/CourierService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/transit/impl/TransitInfoService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/system/IRoleService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/ITakeTimeService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/IOrderService.java
@@ -32,16 +34,19 @@
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/quartz/JobFactory.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/take_delivery/IWorkBillRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/WayBillService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/system/RoleAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/system/IMenuService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/system/IPermissionService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/system/IMenuRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/IAreaService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/PromotionService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/transit/ITransitInfoService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/PromotionAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/IAreaRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/take_delivery/ImageAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/dao/base/ITakeTimeRepository.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/take_delivery/impl/OrderService.java
+/Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/transit/TransitInfoAction.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/ICourierService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/service/base/impl/FixedAreaService.java
 /Users/afeimeme/bosss/bos_management/src/main/java/cn/itcast/bos/web/action/base/FixedAreaAction.java

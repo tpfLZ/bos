@@ -3,6 +3,7 @@
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/Vehicle.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/system/Permission.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/SubArchive.java
+/Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/transit/InOutStorageInfo.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/TakeTime.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/system/Menu.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/Archive.java
@@ -10,10 +11,13 @@
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/SubArea.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/FixedArea.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/Standard.java
+/Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/transit/SignInfo.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/take_delivery/PageBean.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/system/User.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/take_delivery/WayBill.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/take_delivery/Constants.java
+/Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/transit/DeliveryInfo.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/take_delivery/Order.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/Courier.java
+/Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/transit/TransitInfo.java
 /Users/afeimeme/bosss/bos_domain/src/main/java/cn/itcast/bos/domain/base/Area.java

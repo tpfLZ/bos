@@ -1,5 +1,7 @@
 package cn.itcast.bos.service.take_delivery.impl;
 
+import java.util.List;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -36,17 +38,25 @@ public class WayBillService implements IWayBillService {
         WayBill persistWayBill = wayBillRepository.findByWayBillNum(wayBill.getWayBillNum());
         if (persistWayBill == null || persistWayBill.getId() == null) {
             // 运单不存在
+            wayBill.setSignStatus(1);
             wayBillRepository.save(wayBill);
             wayBillIndexRepository.save(wayBill);
         } else {
             // 运单存在
             try {
-                Integer id = persistWayBill.getId();
-                // 将前台传过来的运单详情赋值给之前相同的快速运单，但是要保持id不能变，不然就成了一条新数据
-                BeanUtils.copyProperties(persistWayBill, wayBill);
-                persistWayBill.setId(id);
-                // 保存索引
-                wayBillIndexRepository.save(wayBill);
+                // 判断运单是否为发货状态
+                if (persistWayBill.getSignStatus() == 1) {
+                    Integer id = persistWayBill.getId();
+                    // 将前台传过来的运单详情赋值给之前相同的快速运单，但是要保持id不能变，不然就成了一条新数据
+                    BeanUtils.copyProperties(persistWayBill, wayBill);
+                    persistWayBill.setId(id);
+                    persistWayBill.setSignStatus(2);
+                    // 保存索引
+                    wayBillIndexRepository.save(persistWayBill);
+                } else {
+                    // 已经在运输中，不能修改运单
+                    throw new RuntimeException("运单已发出，无法进行修改");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
@@ -59,7 +69,7 @@ public class WayBillService implements IWayBillService {
         // 判断waybill中的条件是否存在
         if (StringUtils.isBlank(wayBill.getWayBillNum()) && StringUtils.isBlank(wayBill.getSendAddress())
                 && StringUtils.isBlank(wayBill.getRecAddress()) && StringUtils.isBlank(wayBill.getSendProNum())
-                && (wayBill.getSignStatus() == 0 || wayBill.getSignStatus() == null)) {
+                && (wayBill.getSignStatus() == null || wayBill.getSignStatus() == 0)) {
             // 无条件查询，查询数据库
             return wayBillRepository.findAll(pageable);
         } else {
@@ -115,6 +125,14 @@ public class WayBillService implements IWayBillService {
     @Override
     public WayBill findWayBill(String wayBillNum) {
         return wayBillRepository.findByWayBillNum(wayBillNum);
+    }
+
+    @Override
+    public void syncIndex() {
+        // 查询数据库
+        List<WayBill> wayBills = wayBillRepository.findAll();
+        // 同步索引
+        wayBillIndexRepository.save(wayBills);
     }
 
 }

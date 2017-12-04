@@ -30,6 +30,9 @@
 	<!-- 引入shiro权限配置 -->
 	<import resource="applicationContext-shiro.xml" />
 
+	<!-- 引入cache 配置 -->
+	<import resource="applicationContext-cache.xml" />
+
 	<!-- 连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driver}" />
@@ -117,4 +120,5 @@
 			</list>
 		</property>
 	</bean>
+
 </beans>

@@ -7,6 +7,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -46,5 +47,23 @@ public class RoleAction extends ActionSupport implements ModelDriven<Role> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String[] permissionIds;
+    private String menuIds;
+
+    public void setPermissionIds(String[] permissionIds) {
+        this.permissionIds = permissionIds;
+    }
+
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
+
+    @Action(value = "role_save", results = {
+            @Result(name = "success", type = "redirect", location = "pages/system/role.html") })
+    public String save() {
+        roleService.save(role, permissionIds, menuIds);
+        return SUCCESS;
     }
 }

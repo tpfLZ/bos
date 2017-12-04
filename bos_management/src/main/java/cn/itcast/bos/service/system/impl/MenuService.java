@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.itcast.bos.dao.system.IMenuRepository;
 import cn.itcast.bos.domain.system.Menu;
+import cn.itcast.bos.domain.system.User;
 import cn.itcast.bos.service.system.IMenuService;
 
 @Service("menuService")
@@ -25,6 +26,16 @@ public class MenuService implements IMenuService {
     @Override
     public void save(Menu menu) {
         menuRepository.save(menu);
+    }
+
+    @Override
+    public List<Menu> findByUser(User user) {
+        if (user.getUsername().equals("admin")) {
+            return menuRepository.findAll();
+        } else {
+            return menuRepository.findByUser(user.getId());
+        }
+
     }
 
 }
